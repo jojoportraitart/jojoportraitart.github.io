@@ -1,0 +1,1197 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>WHO IS YOUR JOBRO?</title>
+<link href="https://fonts.googleapis.com/css2?family=Bangers&family=Oswald:wght@400;700&family=Crimson+Pro:ital,wght@0,400;0,600;1,400&display=swap" rel="stylesheet">
+<style>
+  :root {
+    --ink: #0D0D0D;
+    --paper: #F5F0E8;
+    --accent: #E8103A;
+    --blue: #1A3A8F;
+    --gold: #D4A017;
+    --panel-border: 4px solid #0D0D0D;
+  }
+
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+
+  body {
+    background: var(--paper);
+    color: var(--ink);
+    font-family: 'Crimson Pro', serif;
+    min-height: 100vh;
+    overflow-x: hidden;
+    cursor: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='20' height='20'%3E%3Ccircle cx='10' cy='10' r='4' fill='%23E8103A'/%3E%3C/svg%3E") 10 10, crosshair;
+  }
+
+  /* Manga paper texture */
+  body::before {
+    content: '';
+    position: fixed;
+    inset: 0;
+    background-image:
+      repeating-linear-gradient(0deg, transparent, transparent 28px, rgba(0,0,0,0.03) 28px, rgba(0,0,0,0.03) 29px),
+      repeating-linear-gradient(90deg, transparent, transparent 28px, rgba(0,0,0,0.02) 28px, rgba(0,0,0,0.02) 29px);
+    pointer-events: none;
+    z-index: 0;
+  }
+
+  /* Torn edge top */
+  body::after {
+    content: '';
+    position: fixed;
+    top: 0; left: 0; right: 0;
+    height: 8px;
+    background: repeating-linear-gradient(90deg,
+      var(--ink) 0px, var(--ink) 12px,
+      transparent 12px, transparent 16px,
+      var(--ink) 16px, var(--ink) 24px,
+      transparent 24px, transparent 30px
+    );
+    z-index: 100;
+  }
+
+  .container {
+    position: relative;
+    z-index: 1;
+    max-width: 720px;
+    margin: 0 auto;
+    padding: 24px 20px 80px;
+  }
+
+  /* HEADER */
+  .header {
+    border: var(--panel-border);
+    background: var(--ink);
+    padding: 32px 28px;
+    margin-bottom: 0;
+    position: relative;
+    overflow: hidden;
+  }
+
+  .header::before {
+    content: '';
+    position: absolute;
+    inset: 0;
+    background: repeating-linear-gradient(
+      -45deg,
+      transparent,
+      transparent 8px,
+      rgba(255,255,255,0.03) 8px,
+      rgba(255,255,255,0.03) 16px
+    );
+  }
+
+  .header-top {
+    display: flex;
+    align-items: center;
+    gap: 16px;
+    margin-bottom: 16px;
+  }
+
+  .chapter-badge {
+    background: var(--accent);
+    color: #fff;
+    font-family: 'Oswald', sans-serif;
+    font-size: 10px;
+    font-weight: 700;
+    letter-spacing: 4px;
+    padding: 6px 14px;
+    white-space: nowrap;
+  }
+
+  .header-line {
+    flex: 1;
+    height: 2px;
+    background: rgba(255,255,255,0.15);
+  }
+
+  .main-title {
+    font-family: 'Bangers', cursive;
+    font-size: clamp(52px, 14vw, 108px);
+    color: var(--paper);
+    line-height: 0.85;
+    letter-spacing: 2px;
+    text-shadow:
+      4px 4px 0 var(--accent),
+      8px 8px 0 rgba(232,16,58,0.3);
+    position: relative;
+    z-index: 1;
+  }
+
+  .main-title span {
+    color: var(--gold);
+    text-shadow: 4px 4px 0 var(--ink);
+  }
+
+  .header-sub {
+    font-family: 'Oswald', sans-serif;
+    font-size: 13px;
+    letter-spacing: 5px;
+    color: rgba(245,240,232,0.55);
+    margin-top: 14px;
+    position: relative;
+    z-index: 1;
+  }
+
+  /* Manga panel decorations on side */
+  .side-panel {
+    border-left: var(--panel-border);
+    border-right: var(--panel-border);
+    border-bottom: var(--panel-border);
+    background: var(--paper);
+    padding: 12px 28px;
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    margin-bottom: 28px;
+  }
+
+  .intro-text {
+    font-size: 15px;
+    line-height: 1.6;
+    color: #333;
+    font-style: italic;
+  }
+
+  .star-divider {
+    color: var(--accent);
+    font-size: 18px;
+    flex-shrink: 0;
+  }
+
+  /* Progress */
+  .progress-track {
+    display: flex;
+    align-items: center;
+    gap: 0;
+    margin-bottom: 24px;
+    border: var(--panel-border);
+    overflow: hidden;
+  }
+
+  .progress-seg {
+    flex: 1;
+    height: 28px;
+    background: var(--paper);
+    border-right: 2px solid var(--ink);
+    transition: background 0.3s;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-family: 'Oswald', sans-serif;
+    font-size: 11px;
+    font-weight: 700;
+    color: rgba(0,0,0,0.25);
+  }
+
+  .progress-seg:last-child { border-right: none; }
+  .progress-seg.done { background: var(--ink); color: var(--paper); }
+  .progress-seg.current { background: var(--accent); color: #fff; }
+
+  /* Question panel */
+  .q-panel {
+    border: var(--panel-border);
+    background: var(--paper);
+    display: none;
+    position: relative;
+    animation: panelIn 0.35s cubic-bezier(0.16,1,0.3,1);
+    overflow: hidden;
+  }
+
+  .q-panel.active { display: block; }
+
+  @keyframes panelIn {
+    from { opacity: 0; transform: translateY(16px); }
+    to { opacity: 1; transform: translateY(0); }
+  }
+
+  .q-panel-header {
+    background: var(--blue);
+    padding: 14px 24px;
+    display: flex;
+    align-items: center;
+    gap: 16px;
+  }
+
+  .q-num {
+    font-family: 'Bangers', cursive;
+    font-size: 42px;
+    color: rgba(255,255,255,0.15);
+    line-height: 1;
+  }
+
+  .q-meta {
+    flex: 1;
+  }
+
+  .q-category {
+    font-family: 'Oswald', sans-serif;
+    font-size: 10px;
+    letter-spacing: 4px;
+    color: rgba(245,240,232,0.6);
+    display: block;
+    margin-bottom: 2px;
+  }
+
+  .q-text {
+    font-family: 'Oswald', sans-serif;
+    font-size: clamp(16px, 3.5vw, 22px);
+    font-weight: 700;
+    color: var(--paper);
+    line-height: 1.2;
+  }
+
+  /* Speed lines accent */
+  .q-panel-header::after {
+    content: '';
+    width: 60px;
+    height: 100%;
+    background: repeating-linear-gradient(
+      90deg,
+      transparent 0px,
+      transparent 3px,
+      rgba(255,255,255,0.04) 3px,
+      rgba(255,255,255,0.04) 6px
+    );
+    flex-shrink: 0;
+  }
+
+  .q-body {
+    padding: 20px 24px 24px;
+  }
+
+  /* Options */
+  .options-list {
+    display: flex;
+    flex-direction: column;
+    gap: 8px;
+    margin-bottom: 20px;
+  }
+
+  .opt-btn {
+    background: var(--paper);
+    border: 2.5px solid var(--ink);
+    padding: 13px 18px;
+    text-align: left;
+    cursor: pointer;
+    font-family: 'Crimson Pro', serif;
+    font-size: 16px;
+    color: var(--ink);
+    transition: all 0.15s;
+    display: flex;
+    align-items: flex-start;
+    gap: 14px;
+    position: relative;
+    overflow: hidden;
+  }
+
+  .opt-btn::before {
+    content: '';
+    position: absolute;
+    inset: 0;
+    background: var(--ink);
+    transform: translateX(-101%);
+    transition: transform 0.2s cubic-bezier(0.16,1,0.3,1);
+    z-index: 0;
+  }
+
+  .opt-btn:hover::before { transform: translateX(0); }
+  .opt-btn:hover { color: var(--paper); border-color: var(--ink); }
+  .opt-btn:hover .opt-letter { background: var(--accent); color: #fff; }
+
+  .opt-btn.selected {
+    background: var(--ink);
+    color: var(--paper);
+    border-color: var(--ink);
+  }
+
+  .opt-btn.selected .opt-letter {
+    background: var(--accent);
+    color: #fff;
+  }
+
+  .opt-letter {
+    font-family: 'Bangers', cursive;
+    font-size: 18px;
+    background: var(--ink);
+    color: var(--paper);
+    width: 30px;
+    height: 30px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    flex-shrink: 0;
+    position: relative;
+    z-index: 1;
+    transition: all 0.15s;
+  }
+
+  .opt-text {
+    position: relative;
+    z-index: 1;
+    line-height: 1.4;
+    padding-top: 4px;
+  }
+
+  .opt-text strong {
+    display: block;
+    font-weight: 600;
+    font-size: 15px;
+  }
+
+  .opt-text span {
+    font-style: italic;
+    font-size: 13.5px;
+    opacity: 0.7;
+  }
+
+  /* Nav */
+  .q-nav {
+    display: flex;
+    gap: 10px;
+    justify-content: flex-end;
+  }
+
+  .nav-btn {
+    font-family: 'Oswald', sans-serif;
+    font-size: 14px;
+    font-weight: 700;
+    letter-spacing: 3px;
+    padding: 12px 28px;
+    border: 2.5px solid var(--ink);
+    cursor: pointer;
+    transition: all 0.15s;
+  }
+
+  .nav-next {
+    background: var(--ink);
+    color: var(--paper);
+  }
+
+  .nav-next:hover {
+    background: var(--accent);
+    border-color: var(--accent);
+  }
+
+  .nav-back {
+    background: transparent;
+    color: var(--ink);
+  }
+
+  .nav-back:hover {
+    background: var(--ink);
+    color: var(--paper);
+  }
+
+  .err-msg {
+    font-family: 'Oswald', sans-serif;
+    font-size: 11px;
+    letter-spacing: 2px;
+    color: var(--accent);
+    margin-bottom: 10px;
+    display: none;
+  }
+  .err-msg.show { display: block; }
+
+  /* RESULT */
+  #result { display: none; }
+  #result.show {
+    display: block;
+    animation: panelIn 0.5s cubic-bezier(0.16,1,0.3,1);
+  }
+
+  .result-banner {
+    background: var(--accent);
+    border: var(--panel-border);
+    padding: 20px 28px;
+    text-align: center;
+    margin-bottom: 0;
+  }
+
+  .result-eyebrow {
+    font-family: 'Oswald', sans-serif;
+    font-size: 11px;
+    letter-spacing: 6px;
+    color: rgba(255,255,255,0.7);
+    margin-bottom: 6px;
+  }
+
+  .result-headline {
+    font-family: 'Bangers', cursive;
+    font-size: clamp(14px, 4vw, 20px);
+    color: #fff;
+    letter-spacing: 2px;
+  }
+
+  .jobro-card {
+    border-left: var(--panel-border);
+    border-right: var(--panel-border);
+    border-bottom: var(--panel-border);
+    background: var(--paper);
+    overflow: hidden;
+  }
+
+  .jobro-top {
+    display: grid;
+    grid-template-columns: auto 1fr;
+    border-bottom: var(--panel-border);
+  }
+
+  .jobro-icon-box {
+    width: 120px;
+    background: var(--ink);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 64px;
+    border-right: var(--panel-border);
+    flex-shrink: 0;
+    min-height: 120px;
+  }
+
+  .jobro-info {
+    padding: 20px 24px;
+  }
+
+  .jobro-part {
+    font-family: 'Oswald', sans-serif;
+    font-size: 10px;
+    letter-spacing: 4px;
+    color: var(--accent);
+    display: block;
+    margin-bottom: 4px;
+  }
+
+  .jobro-name {
+    font-family: 'Bangers', cursive;
+    font-size: clamp(36px, 8vw, 60px);
+    color: var(--ink);
+    line-height: 0.9;
+    text-shadow: 3px 3px 0 rgba(0,0,0,0.1);
+    margin-bottom: 10px;
+  }
+
+  .jobro-tags {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 6px;
+  }
+
+  .tag {
+    font-family: 'Oswald', sans-serif;
+    font-size: 10px;
+    letter-spacing: 2px;
+    padding: 3px 10px;
+    border: 1.5px solid var(--ink);
+    font-weight: 700;
+  }
+
+  .tag.accent { background: var(--gold); border-color: var(--gold); }
+
+  .jobro-body {
+    padding: 24px;
+    border-bottom: var(--panel-border);
+  }
+
+  .section-label {
+    font-family: 'Oswald', sans-serif;
+    font-size: 10px;
+    letter-spacing: 4px;
+    font-weight: 700;
+    color: var(--blue);
+    margin-bottom: 8px;
+    display: flex;
+    align-items: center;
+    gap: 8px;
+  }
+
+  .section-label::after {
+    content: '';
+    flex: 1;
+    height: 1.5px;
+    background: var(--blue);
+    opacity: 0.3;
+  }
+
+  .jobro-desc {
+    font-size: 16px;
+    line-height: 1.75;
+    color: #222;
+    margin-bottom: 20px;
+  }
+
+  .why-match {
+    background: rgba(26,58,143,0.06);
+    border-left: 4px solid var(--blue);
+    padding: 16px 18px;
+    font-size: 15px;
+    line-height: 1.7;
+    font-style: italic;
+    color: #333;
+  }
+
+  .traits-grid {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 10px;
+    margin-top: 20px;
+  }
+
+  .trait-block {
+    border: 2px solid var(--ink);
+    padding: 12px 14px;
+    background: var(--paper);
+  }
+
+  .trait-label {
+    font-family: 'Oswald', sans-serif;
+    font-size: 9px;
+    letter-spacing: 3px;
+    color: var(--accent);
+    display: block;
+    margin-bottom: 4px;
+  }
+
+  .trait-value {
+    font-family: 'Oswald', sans-serif;
+    font-size: 14px;
+    font-weight: 700;
+    color: var(--ink);
+  }
+
+  /* CTA */
+  .cta-box {
+    padding: 32px 28px;
+    text-align: center;
+    background: var(--ink);
+    position: relative;
+    overflow: hidden;
+  }
+
+  .cta-box::before {
+    content: 'TIER 2';
+    font-family: 'Bangers', cursive;
+    font-size: 160px;
+    color: rgba(255,255,255,0.03);
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    pointer-events: none;
+    white-space: nowrap;
+  }
+
+  .cta-eyebrow {
+    font-family: 'Oswald', sans-serif;
+    font-size: 10px;
+    letter-spacing: 6px;
+    color: var(--gold);
+    margin-bottom: 12px;
+    position: relative;
+    z-index: 1;
+  }
+
+  .cta-title {
+    font-family: 'Bangers', cursive;
+    font-size: clamp(28px, 6vw, 44px);
+    color: var(--paper);
+    line-height: 1.1;
+    margin-bottom: 14px;
+    position: relative;
+    z-index: 1;
+  }
+
+  .cta-title span { color: var(--gold); }
+
+  .cta-body {
+    font-size: 15px;
+    color: rgba(245,240,232,0.65);
+    max-width: 420px;
+    margin: 0 auto 24px;
+    line-height: 1.65;
+    position: relative;
+    z-index: 1;
+  }
+
+  .cta-btn {
+    display: inline-block;
+    background: var(--accent);
+    color: #fff;
+    font-family: 'Oswald', sans-serif;
+    font-size: 16px;
+    font-weight: 700;
+    letter-spacing: 4px;
+    padding: 16px 44px;
+    border: none;
+    cursor: pointer;
+    transition: all 0.2s;
+    text-decoration: none;
+    position: relative;
+    z-index: 1;
+  }
+
+  .cta-btn:hover {
+    background: var(--gold);
+    color: var(--ink);
+    transform: translateY(-2px);
+    box-shadow: 0 6px 0 rgba(0,0,0,0.4);
+  }
+
+  .cta-sub {
+    font-family: 'Oswald', sans-serif;
+    font-size: 10px;
+    letter-spacing: 3px;
+    color: rgba(245,240,232,0.3);
+    margin-top: 16px;
+    position: relative;
+    z-index: 1;
+  }
+
+  .restart-btn {
+    display: block;
+    width: 100%;
+    background: transparent;
+    border: var(--panel-border);
+    border-top: none;
+    padding: 14px;
+    font-family: 'Oswald', sans-serif;
+    font-size: 13px;
+    letter-spacing: 4px;
+    color: rgba(13,13,13,0.4);
+    cursor: pointer;
+    transition: all 0.2s;
+  }
+
+  .restart-btn:hover { background: rgba(0,0,0,0.05); color: var(--ink); }
+
+  /* Loading */
+  .loading-screen {
+    display: none;
+    position: fixed;
+    inset: 0;
+    background: var(--ink);
+    z-index: 200;
+    align-items: center;
+    justify-content: center;
+    flex-direction: column;
+    gap: 20px;
+  }
+
+  .loading-screen.show { display: flex; }
+
+  .loading-title {
+    font-family: 'Bangers', cursive;
+    font-size: 36px;
+    color: var(--paper);
+    letter-spacing: 3px;
+    animation: loadBlink 0.7s ease-in-out infinite alternate;
+  }
+
+  @keyframes loadBlink {
+    from { opacity: 0.5; }
+    to { opacity: 1; }
+  }
+
+  .loading-bar-wrap {
+    width: 260px;
+    height: 6px;
+    border: 2px solid rgba(255,255,255,0.2);
+    overflow: hidden;
+  }
+
+  .loading-bar-fill {
+    height: 100%;
+    background: var(--accent);
+    width: 0%;
+    animation: loadFill 2.5s ease-in-out forwards;
+  }
+
+  @keyframes loadFill {
+    0% { width: 0%; }
+    40% { width: 60%; }
+    70% { width: 80%; }
+    90% { width: 92%; }
+  }
+
+  @media (max-width: 480px) {
+    .jobro-top { grid-template-columns: 1fr; }
+    .jobro-icon-box { width: 100%; height: 100px; border-right: none; border-bottom: var(--panel-border); }
+    .traits-grid { grid-template-columns: 1fr; }
+  }
+</style>
+</head>
+<body>
+
+<div class="loading-screen" id="loading">
+  <div class="loading-title">FINDING YOUR JOBRO...</div>
+  <div class="loading-bar-wrap"><div class="loading-bar-fill"></div></div>
+  <div style="font-family:'Oswald',sans-serif;font-size:11px;letter-spacing:4px;color:rgba(245,240,232,0.3);margin-top:4px;">SCANNING THE JOESTAR BLOODLINE</div>
+</div>
+
+<div class="container">
+
+  <div class="header">
+    <div class="header-top">
+      <div class="chapter-badge">★ LEAD MAGNET QUIZ ★</div>
+      <div class="header-line"></div>
+    </div>
+    <div class="main-title">WHO IS YOUR<br><span>JoBro?</span></div>
+    <div class="header-sub">★ A PERSONALITY QUIZ FOR JOJO FANS ★</div>
+  </div>
+
+  <div class="side-panel">
+    <div class="star-divider">✦</div>
+    <div class="intro-text">Answer 6 questions honestly. Your true JoBro has been waiting — it's time to find out who stands beside you.</div>
+    <div class="star-divider">✦</div>
+  </div>
+
+  <!-- Progress -->
+  <div class="progress-track" id="progress-track">
+    <div class="progress-seg current" id="seg-1">1</div>
+    <div class="progress-seg" id="seg-2">2</div>
+    <div class="progress-seg" id="seg-3">3</div>
+    <div class="progress-seg" id="seg-4">4</div>
+    <div class="progress-seg" id="seg-5">5</div>
+    <div class="progress-seg" id="seg-6">6</div>
+  </div>
+
+  <!-- Q1 -->
+  <div class="q-panel active" data-q="1">
+    <div class="q-panel-header">
+      <div class="q-num">01</div>
+      <div class="q-meta">
+        <span class="q-category">★ LOYALTY & FRIENDSHIP</span>
+        <div class="q-text">When your friend is in serious trouble, what's your instinct?</div>
+      </div>
+    </div>
+    <div class="q-body">
+      <div class="options-list">
+        <button class="opt-btn" onclick="pick(this,'q1','rush')" data-v="rush">
+          <div class="opt-letter">A</div>
+          <div class="opt-text"><strong>Rush in immediately</strong><span>Figure it out as you go — hesitation costs time</span></div>
+        </button>
+        <button class="opt-btn" onclick="pick(this,'q1','plan')" data-v="plan">
+          <div class="opt-letter">B</div>
+          <div class="opt-text"><strong>Assess the situation first</strong><span>A bad plan is worse than no plan</span></div>
+        </button>
+        <button class="opt-btn" onclick="pick(this,'q1','rally')" data-v="rally">
+          <div class="opt-letter">C</div>
+          <div class="opt-text"><strong>Rally everyone around you</strong><span>Nobody fights alone if you can help it</span></div>
+        </button>
+        <button class="opt-btn" onclick="pick(this,'q1','silent')" data-v="silent">
+          <div class="opt-letter">D</div>
+          <div class="opt-text"><strong>Handle it quietly yourself</strong><span>Your friend shouldn't have to ask twice</span></div>
+        </button>
+      </div>
+      <div class="err-msg" id="err-1">CHOOSE AN ANSWER TO CONTINUE</div>
+      <div class="q-nav"><button class="nav-btn nav-next" onclick="nextQ(1)">NEXT ▶</button></div>
+    </div>
+  </div>
+
+  <!-- Q2 -->
+  <div class="q-panel" data-q="2">
+    <div class="q-panel-header">
+      <div class="q-num">02</div>
+      <div class="q-meta">
+        <span class="q-category">★ YOUR ENERGY</span>
+        <div class="q-text">How would your friends describe your vibe?</div>
+      </div>
+    </div>
+    <div class="q-body">
+      <div class="options-list">
+        <button class="opt-btn" onclick="pick(this,'q2','loud')" data-v="loud">
+          <div class="opt-letter">A</div>
+          <div class="opt-text"><strong>Loud and electric</strong><span>You light up every room — sometimes literally</span></div>
+        </button>
+        <button class="opt-btn" onclick="pick(this,'q2','cool')" data-v="cool">
+          <div class="opt-letter">B</div>
+          <div class="opt-text"><strong>Cool and unreadable</strong><span>People can't tell what you're thinking and that's fine</span></div>
+        </button>
+        <button class="opt-btn" onclick="pick(this,'q2','warm')" data-v="warm">
+          <div class="opt-letter">C</div>
+          <div class="opt-text"><strong>Warm and dependable</strong><span>The one everyone calls when things go wrong</span></div>
+        </button>
+        <button class="opt-btn" onclick="pick(this,'q2','wild')" data-v="wild">
+          <div class="opt-letter">D</div>
+          <div class="opt-text"><strong>Unpredictable and chaotic</strong><span>You keep people guessing — and they love it</span></div>
+        </button>
+      </div>
+      <div class="err-msg" id="err-2">CHOOSE AN ANSWER TO CONTINUE</div>
+      <div class="q-nav">
+        <button class="nav-btn nav-back" onclick="prevQ(2)">◀ BACK</button>
+        <button class="nav-btn nav-next" onclick="nextQ(2)">NEXT ▶</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- Q3 -->
+  <div class="q-panel" data-q="3">
+    <div class="q-panel-header">
+      <div class="q-num">03</div>
+      <div class="q-meta">
+        <span class="q-category">★ VALUES</span>
+        <div class="q-text">What matters most to you in life?</div>
+      </div>
+    </div>
+    <div class="q-body">
+      <div class="options-list">
+        <button class="opt-btn" onclick="pick(this,'q3','justice')" data-v="justice">
+          <div class="opt-letter">A</div>
+          <div class="opt-text"><strong>Justice and doing what's right</strong><span>Even when it costs you something</span></div>
+        </button>
+        <button class="opt-btn" onclick="pick(this,'q3','family')" data-v="family">
+          <div class="opt-letter">B</div>
+          <div class="opt-text"><strong>Protecting the people you love</strong><span>Everyone else is secondary</span></div>
+        </button>
+        <button class="opt-btn" onclick="pick(this,'q3','growth')" data-v="growth">
+          <div class="opt-letter">C</div>
+          <div class="opt-text"><strong>Becoming the best version of yourself</strong><span>The grind never stops</span></div>
+        </button>
+        <button class="opt-btn" onclick="pick(this,'q3','freedom')" data-v="freedom">
+          <div class="opt-letter">D</div>
+          <div class="opt-text"><strong>Freedom and living on your terms</strong><span>No one tells you how to live</span></div>
+        </button>
+      </div>
+      <div class="err-msg" id="err-3">CHOOSE AN ANSWER TO CONTINUE</div>
+      <div class="q-nav">
+        <button class="nav-btn nav-back" onclick="prevQ(3)">◀ BACK</button>
+        <button class="nav-btn nav-next" onclick="nextQ(3)">NEXT ▶</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- Q4 -->
+  <div class="q-panel" data-q="4">
+    <div class="q-panel-header">
+      <div class="q-num">04</div>
+      <div class="q-meta">
+        <span class="q-category">★ UNDER PRESSURE</span>
+        <div class="q-text">You're cornered with no obvious way out. You...</div>
+      </div>
+    </div>
+    <div class="q-body">
+      <div class="options-list">
+        <button class="opt-btn" onclick="pick(this,'q4','fight')" data-v="fight">
+          <div class="opt-letter">A</div>
+          <div class="opt-text"><strong>Fight harder</strong><span>Impossible odds are just a warm-up</span></div>
+        </button>
+        <button class="opt-btn" onclick="pick(this,'q4','clever')" data-v="clever">
+          <div class="opt-letter">B</div>
+          <div class="opt-text"><strong>Find the angle nobody saw</strong><span>There's always a move — you just have to find it</span></div>
+        </button>
+        <button class="opt-btn" onclick="pick(this,'q4','endure')" data-v="endure">
+          <div class="opt-letter">C</div>
+          <div class="opt-text"><strong>Endure until the opening comes</strong><span>Patience is a weapon too</span></div>
+        </button>
+        <button class="opt-btn" onclick="pick(this,'q4','bluff')" data-v="bluff">
+          <div class="opt-letter">D</div>
+          <div class="opt-text"><strong>Bluff your way through it</strong><span>Confidence can change the whole situation</span></div>
+        </button>
+      </div>
+      <div class="err-msg" id="err-4">CHOOSE AN ANSWER TO CONTINUE</div>
+      <div class="q-nav">
+        <button class="nav-btn nav-back" onclick="prevQ(4)">◀ BACK</button>
+        <button class="nav-btn nav-next" onclick="nextQ(4)">NEXT ▶</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- Q5 -->
+  <div class="q-panel" data-q="5">
+    <div class="q-panel-header">
+      <div class="q-num">05</div>
+      <div class="q-meta">
+        <span class="q-category">★ YOUR ROLE</span>
+        <div class="q-text">In a group, you naturally become...</div>
+      </div>
+    </div>
+    <div class="q-body">
+      <div class="options-list">
+        <button class="opt-btn" onclick="pick(this,'q5','leader')" data-v="leader">
+          <div class="opt-letter">A</div>
+          <div class="opt-text"><strong>The leader</strong><span>People look to you whether you asked for it or not</span></div>
+        </button>
+        <button class="opt-btn" onclick="pick(this,'q5','strategist')" data-v="strategist">
+          <div class="opt-letter">B</div>
+          <div class="opt-text"><strong>The strategist</strong><span>You see the whole board while everyone else sees one square</span></div>
+        </button>
+        <button class="opt-btn" onclick="pick(this,'q5','heart')" data-v="heart">
+          <div class="opt-letter">C</div>
+          <div class="opt-text"><strong>The heart of the group</strong><span>You hold everyone together when things get hard</span></div>
+        </button>
+        <button class="opt-btn" onclick="pick(this,'q5','wildcard')" data-v="wildcard">
+          <div class="opt-letter">D</div>
+          <div class="opt-text"><strong>The wildcard</strong><span>You do the thing nobody expected — and it works</span></div>
+        </button>
+      </div>
+      <div class="err-msg" id="err-5">CHOOSE AN ANSWER TO CONTINUE</div>
+      <div class="q-nav">
+        <button class="nav-btn nav-back" onclick="prevQ(5)">◀ BACK</button>
+        <button class="nav-btn nav-next" onclick="nextQ(5)">NEXT ▶</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- Q6 -->
+  <div class="q-panel" data-q="6">
+    <div class="q-panel-header">
+      <div class="q-num">06</div>
+      <div class="q-meta">
+        <span class="q-category">★ FINAL QUESTION</span>
+        <div class="q-text">What kind of friend are you at your best?</div>
+      </div>
+    </div>
+    <div class="q-body">
+      <div class="options-list">
+        <button class="opt-btn" onclick="pick(this,'q6','inspire')" data-v="inspire">
+          <div class="opt-letter">A</div>
+          <div class="opt-text"><strong>The one who inspires everyone</strong><span>You make people believe in themselves</span></div>
+        </button>
+        <button class="opt-btn" onclick="pick(this,'q6','protect')" data-v="protect">
+          <div class="opt-letter">B</div>
+          <div class="opt-text"><strong>The one who protects quietly</strong><span>You'd take the hit so they don't have to</span></div>
+        </button>
+        <button class="opt-btn" onclick="pick(this,'q6','challenge')" data-v="challenge">
+          <div class="opt-letter">C</div>
+          <div class="opt-text"><strong>The one who pushes people harder</strong><span>You refuse to let your friends settle</span></div>
+        </button>
+        <button class="opt-btn" onclick="pick(this,'q6','laugh')" data-v="laugh">
+          <div class="opt-letter">D</div>
+          <div class="opt-text"><strong>The one who brings the energy</strong><span>Life's too short to be serious all the time</span></div>
+        </button>
+      </div>
+      <div class="err-msg" id="err-6">CHOOSE AN ANSWER TO CONTINUE</div>
+      <div class="q-nav">
+        <button class="nav-btn nav-back" onclick="prevQ(6)">◀ BACK</button>
+        <button class="nav-btn nav-next" onclick="submitQuiz()">REVEAL MY JOBRO ★</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- RESULT -->
+  <div id="result">
+    <div class="result-banner">
+      <div class="result-eyebrow">★ YOUR RESULT IS IN ★</div>
+      <div class="result-headline" id="res-headline">YOUR JOBRO HAS BEEN REVEALED</div>
+    </div>
+    <div class="jobro-card">
+      <div class="jobro-top">
+        <div class="jobro-icon-box" id="res-emoji">⭐</div>
+        <div class="jobro-info">
+          <span class="jobro-part" id="res-part">PART 3 · STARDUST CRUSADERS</span>
+          <div class="jobro-name" id="res-name">JOSEPH JOESTAR</div>
+          <div class="jobro-tags" id="res-tags"></div>
+        </div>
+      </div>
+      <div class="jobro-body">
+        <div class="section-label">CHARACTER PROFILE</div>
+        <div class="jobro-desc" id="res-desc">Loading...</div>
+        <div class="section-label">WHY YOU TWO MATCH</div>
+        <div class="why-match" id="res-why">Loading...</div>
+        <div class="traits-grid">
+          <div class="trait-block">
+            <span class="trait-label">SHARED STRENGTH</span>
+            <div class="trait-value" id="res-strength">—</div>
+          </div>
+          <div class="trait-block">
+            <span class="trait-label">YOUR DYNAMIC</span>
+            <div class="trait-value" id="res-dynamic">—</div>
+          </div>
+          <div class="trait-block">
+            <span class="trait-label">BATTLE ROLE</span>
+            <div class="trait-value" id="res-role">—</div>
+          </div>
+          <div class="trait-block">
+            <span class="trait-label">FRIENDSHIP TYPE</span>
+            <div class="trait-value" id="res-friendship">—</div>
+          </div>
+        </div>
+      </div>
+      <div class="cta-box">
+        <div class="cta-eyebrow">★ TAKE IT FURTHER ★</div>
+        <div class="cta-title">Now Imagine Being Drawn<br><span>Alongside Them.</span></div>
+        <div class="cta-body">I draw real people in the JoJo art style — side by side with your JoBro in full manga illustration. This is exactly what Tier 2 is.</div>
+        <a href="https://ig.me/m/jojo.portrait.art" target="_blank" class="cta-btn">DM TO GET DRAWN ▶</a>
+        <div class="cta-sub">PORTRAITS START FROM TIER 1 · FULL MANGA PAGES AVAILABLE AT TIER 4</div>
+      </div>
+    </div>
+    <button class="restart-btn" onclick="restart()">↺ RETAKE THE QUIZ</button>
+  </div>
+
+</div>
+
+<script>
+const answers = {};
+
+const characters = [
+  {
+    name: "JONATHAN JOESTAR",
+    part: "PART 1 · PHANTOM BLOOD",
+    emoji: "🎩",
+    tags: ["GENTLEMAN", "RIGHTEOUS", "PROTECTOR"],
+    tagAccent: 0,
+    desc: "The original Joestar. Jonathan is a man of pure heart and unshakeable honor — someone who would rather die than compromise his values. He fights not for glory, but because it is simply the right thing to do.",
+    why: "You and Jonathan share a bone-deep sense of justice. He'd never question your motives because they mirror his own. Together you'd be unstoppable — not because you're the most powerful, but because you never stop.",
+    strength: "UNBREAKABLE WILL", dynamic: "INSPIRE EACH OTHER", role: "THE VANGUARD", friendship: "RIDE OR DIE",
+    scores: { rush:2, plan:1, loud:1, cool:0, warm:2, wild:0, justice:3, family:2, growth:1, freedom:0, fight:2, clever:1, endure:1, bluff:0, leader:2, strategist:0, heart:2, wildcard:0, inspire:2, protect:2, challenge:1, laugh:0 }
+  },
+  {
+    name: "JOSEPH JOESTAR",
+    part: "PART 2 · BATTLE TENDENCY",
+    emoji: "🃏",
+    tags: ["TRICKSTER", "GENIUS", "CHAOTIC GOOD"],
+    tagAccent: 1,
+    desc: "The greatest JoJo. Joseph is a master bluffer who turns every impossible situation into a stage performance. Loud, clever, and magnetic — he wins fights with his brain as much as his fists.",
+    why: "You and Joseph would never have a dull moment. He matches your energy and then doubles it. When things get desperate, you two don't panic — you improvise, and somehow it always works.",
+    strength: "ADAPTABILITY", dynamic: "CHAOS DUO", role: "THE WILDCARD", friendship: "PARTNER IN CRIME",
+    scores: { rush:1, plan:1, loud:3, cool:0, warm:1, wild:3, justice:1, family:2, growth:1, freedom:3, fight:1, clever:3, endure:0, bluff:3, leader:1, strategist:2, heart:1, wildcard:3, inspire:1, protect:1, challenge:2, laugh:3 }
+  },
+  {
+    name: "JOTARO KUJO",
+    part: "PART 3 · STARDUST CRUSADERS",
+    emoji: "🌟",
+    tags: ["STOIC", "ANALYTICAL", "LOYAL"],
+    tagAccent: 0,
+    desc: "Cool on the surface, fierce underneath. Jotaro doesn't waste words or movements — he observes, calculates, and then acts with devastating precision. His loyalty runs deeper than he'll ever admit out loud.",
+    why: "Jotaro doesn't choose friends lightly. The fact that he chose you means he sees something real. Your dynamic is quiet and unspoken — no need to say much, because you both already know.",
+    strength: "COLD PRECISION", dynamic: "SILENT UNDERSTANDING", role: "THE CLOSER", friendship: "UNSPOKEN BOND",
+    scores: { rush:0, plan:2, loud:0, cool:3, warm:1, wild:0, justice:3, family:2, growth:2, freedom:1, fight:2, clever:2, endure:2, bluff:0, leader:2, strategist:2, heart:1, wildcard:0, inspire:1, protect:2, challenge:2, laugh:0 }
+  },
+  {
+    name: "JOSUKE HIGASHIKATA",
+    part: "PART 4 · DIAMOND IS UNBREAKABLE",
+    emoji: "💎",
+    tags: ["PROTECTIVE", "PASSIONATE", "COMMUNITY"],
+    tagAccent: 2,
+    desc: "Josuke protects his town, his family, and his friends with everything he has. He's warm and funny until someone crosses a line — then he becomes something else entirely. His pride is his power.",
+    why: "Josuke is the friend who shows up. He'd have your back in a fight, help you move, and check in on you after. Together you'd build something — a crew, a community, a place where people feel safe.",
+    strength: "FIERCE LOYALTY", dynamic: "NEIGHBORHOOD LEGENDS", role: "THE ANCHOR", friendship: "COMMUNITY BUILDERS",
+    scores: { rush:2, plan:1, loud:2, cool:1, warm:3, wild:1, justice:2, family:3, growth:1, freedom:1, fight:2, clever:1, endure:2, bluff:1, leader:1, strategist:1, heart:3, wildcard:1, inspire:1, protect:3, challenge:1, laugh:2 }
+  },
+  {
+    name: "GIORNO GIOVANNA",
+    part: "PART 5 · GOLDEN WIND",
+    emoji: "🌸",
+    tags: ["VISIONARY", "RUTHLESS", "IDEALIST"],
+    tagAccent: 0,
+    desc: "Giorno has a dream — and nothing will stop him from reaching it. Calm, elegant, and dangerously perceptive, he moves through the world like he already knows how it ends. His compassion and his ruthlessness exist in perfect balance.",
+    why: "You and Giorno are both driven by something bigger than yourselves. He respects your conviction, and you respect his vision. Together you'd be the kind of duo that quietly changes everything around you.",
+    strength: "IRON RESOLVE", dynamic: "SHARED VISION", role: "THE STRATEGIST", friendship: "BUILT ON RESPECT",
+    scores: { rush:0, plan:3, loud:0, cool:2, warm:1, wild:1, justice:2, family:1, growth:3, freedom:2, fight:1, clever:3, endure:2, bluff:1, leader:2, strategist:3, heart:1, wildcard:1, inspire:2, protect:1, challenge:3, laugh:0 }
+  },
+  {
+    name: "JOLYNE CUJOH",
+    part: "PART 6 · STONE OCEAN",
+    emoji: "🕸️",
+    tags: ["FIERCE", "RESILIENT", "UNDEFEATED"],
+    tagAccent: 1,
+    desc: "Jolyne clawed her way up from nothing and never stopped fighting. She's raw, real, and refuses to be broken — no matter what the world throws at her. Her strength comes from surviving things that would end anyone else.",
+    why: "Jolyne respects people who don't quit. You two would push each other to limits neither knew existed. She'd fight for you with everything she has — and expect the same in return. No half measures.",
+    strength: "ENDURANCE", dynamic: "FIGHT TOGETHER", role: "THE SURVIVOR", friendship: "EARNED IN BATTLE",
+    scores: { rush:3, plan:0, loud:2, cool:1, warm:1, wild:2, justice:2, family:2, growth:2, freedom:3, fight:3, clever:1, endure:3, bluff:1, leader:1, strategist:1, heart:2, wildcard:2, inspire:2, protect:2, challenge:2, laugh:1 }
+  }
+];
+
+function pick(btn, q, val) {
+  const panel = btn.closest('.q-panel');
+  panel.querySelectorAll('.opt-btn').forEach(b => b.classList.remove('selected'));
+  btn.classList.add('selected');
+  answers[q] = val;
+  document.getElementById('err-' + q.replace('q','')).classList.remove('show');
+}
+
+function nextQ(n) {
+  if (!answers['q'+n]) {
+    document.getElementById('err-'+n).classList.add('show');
+    return;
+  }
+  const panels = document.querySelectorAll('.q-panel');
+  panels[n-1].classList.remove('active');
+  panels[n].classList.add('active');
+  document.getElementById('seg-'+n).classList.remove('current');
+  document.getElementById('seg-'+n).classList.add('done');
+  document.getElementById('seg-'+(n+1)).classList.add('current');
+  window.scrollTo({top:0, behavior:'smooth'});
+}
+
+function prevQ(n) {
+  const panels = document.querySelectorAll('.q-panel');
+  panels[n-1].classList.remove('active');
+  panels[n-2].classList.add('active');
+  document.getElementById('seg-'+n).classList.remove('current');
+  document.getElementById('seg-'+(n-1)).classList.remove('done');
+  document.getElementById('seg-'+(n-1)).classList.add('current');
+  window.scrollTo({top:0, behavior:'smooth'});
+}
+
+function submitQuiz() {
+  if (!answers['q6']) {
+    document.getElementById('err-6').classList.add('show');
+    return;
+  }
+  document.getElementById('loading').classList.add('show');
+  setTimeout(showResult, 2600);
+}
+
+function showResult() {
+  // Score each character
+  const allAnswers = Object.values(answers);
+  const scored = characters.map(c => {
+    let score = 0;
+    allAnswers.forEach(a => { score += (c.scores[a] || 0); });
+    return { c, score };
+  });
+  scored.sort((a,b) => b.score - a.score);
+  const winner = scored[0].c;
+
+  document.getElementById('loading').classList.remove('show');
+  document.querySelectorAll('.q-panel').forEach(p => p.classList.remove('active'));
+  document.getElementById('progress-track').style.display = 'none';
+
+  document.getElementById('res-headline').textContent = `YOUR JOBRO IS ${winner.name}`;
+  document.getElementById('res-emoji').textContent = winner.emoji;
+  document.getElementById('res-part').textContent = winner.part;
+  document.getElementById('res-name').textContent = winner.name;
+  document.getElementById('res-desc').textContent = winner.desc;
+  document.getElementById('res-why').textContent = winner.why;
+  document.getElementById('res-strength').textContent = winner.strength;
+  document.getElementById('res-dynamic').textContent = winner.dynamic;
+  document.getElementById('res-role').textContent = winner.role;
+  document.getElementById('res-friendship').textContent = winner.friendship;
+
+  const tagsEl = document.getElementById('res-tags');
+  tagsEl.innerHTML = '';
+  winner.tags.forEach((t, i) => {
+    const span = document.createElement('span');
+    span.className = 'tag' + (i === winner.tagAccent ? ' accent' : '');
+    span.textContent = t;
+    tagsEl.appendChild(span);
+  });
+
+  const result = document.getElementById('result');
+  result.classList.add('show');
+  window.scrollTo({top:0, behavior:'smooth'});
+}
+
+function restart() {
+  Object.keys(answers).forEach(k => delete answers[k]);
+  document.querySelectorAll('.opt-btn').forEach(b => b.classList.remove('selected'));
+  document.querySelectorAll('.err-msg').forEach(e => e.classList.remove('show'));
+  document.getElementById('result').classList.remove('show');
+  document.getElementById('progress-track').style.display = 'flex';
+  document.querySelectorAll('.progress-seg').forEach((s,i) => {
+    s.classList.remove('current','done');
+    if (i===0) s.classList.add('current');
+  });
+  document.querySelectorAll('.q-panel').forEach((p,i) => {
+    p.classList.remove('active');
+    if (i===0) p.classList.add('active');
+  });
+  window.scrollTo({top:0, behavior:'smooth'});
+}
+</script>
+</body>
+</html>
